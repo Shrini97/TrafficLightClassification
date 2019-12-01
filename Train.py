@@ -19,7 +19,7 @@ Params = {'batch_size': 64,
           'num_workers': 6}
 TestingGenerator = data.DataLoader(TestLoader, **Params)
 
-Model = MultiLabelClassifier(FeatureExtractor = 'resnet18')
+Model = MultiLabelClassifier(FeatureExtractor = 'resnet18').device('cuda')
 Loss = nn.BCELoss(reduction='mean')
 Optimizer = torch.optim.Adam(params = Model.parameters())
 
@@ -27,6 +27,7 @@ for epoch in range(10):
     # Training
     t3 = time.time()
     for local_batch, local_labels in TrainingGenerator:
+        local_batch, local_labels = local_batch.device('cuda'), local_labels.device('cuda')
         t1 = time.time()
         Model.zero_grad()
         
