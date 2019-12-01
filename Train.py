@@ -9,15 +9,15 @@ from DataLoader import *
 import matplotlib.pyplot as plt
 
 TrainLoader = TrafficLight(RootDirectory="./data/train/")
-Params = {'batch_size': 64,
+Params = {'batch_size': 32,
           'shuffle': True,
-          'num_workers': 6}
+          'num_workers': 4}
 TrainingGenerator = data.DataLoader(TrainLoader, **Params)
 
 TestLoader = TrafficLight(RootDirectory="./data/test/")
-Params = {'batch_size': 64,
+Params = {'batch_size': 32,
           'shuffle': True,
-          'num_workers': 6}
+          'num_workers': 4}
 TestingGenerator = data.DataLoader(TestLoader, **Params)
 
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
@@ -51,7 +51,7 @@ for epoch in range(1,100):
         Optimizer.step()
         
         t3 = time.time()
-        print("Forward Pass:", "%.3f" % (t2-t1), "Optimization:", "%.3f" % (t3-t2), "Loss", l.item())
+        print("Epoch in training :", epoch, "steps:", steps, "Forward Pass:", "%.3f" % (t2-t1), "Optimization:", "%.3f" % (t3-t2), "Loss:", l.item())
         l0+=l.item()
         steps+=1
     
@@ -71,7 +71,7 @@ for epoch in range(1,100):
         
         t3 = time.time()
         
-        print("Forward Pass:", "%.3f" % (t2-t1), "Optimization:", "%.3f" % (t3-t2), "Loss", l.item())
+        print("Epoch in testing:", epoch, "steps:", steps, "Forward Pass:", "%.3f" % (t2-t1), "Optimization:", "%.3f" % (t3-t2), "Loss:", l.item())
         l0+=l.item()
         steps+=1
     
