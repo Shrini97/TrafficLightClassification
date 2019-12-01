@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from torchvision import transforms
 import torch.nn as nn
 from DataLoader import *
+import matplotlib.pyplot as plt
 
 TrainLoader = TrafficLight(RootDirectory="./data/train/")
 Params = {'batch_size': 64,
@@ -19,15 +20,26 @@ Params = {'batch_size': 64,
           'num_workers': 6}
 TestingGenerator = data.DataLoader(TestLoader, **Params)
 
-Model = MultiLabelClassifier(FeatureExtractor = 'resnet18').to('cuda')
+device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+Model = MultiLabelClassifier(FeatureExtractor = 'resnet18').to(device)
 Loss = nn.BCELoss(reduction='mean')
-Optimizer = torch.optim.Adam(params = Model.parameters())
+Optimizer = torch.optim.Adam([
+                                {'params': Model.FeatureExtractor.parameters(), 'lr': 1e-6},
+                                {'params': Model.conv1.parameters(), 'lr': 1e-4},
+                                {'params': Model.linear.parameters(), 'lr': 1e-4}
+                            ], lr=1e-4, betas=[0.9, 0.999])
 
-for epoch in range(10):
+
+for epoch in range(1,100):
     # Training
+    l0 = 0
+    steps = 0
+    min_loss = 10
     t3 = time.time()
+    train_losses = []
+    test_losses = []
     for local_batch, local_labels in TrainingGenerator:
-        local_batch, local_labels = local_batch.to('cuda'), local_labels.to('cuda')
+        local_batch, local_labels = local_batch.to(device), local_labels.to(device)
         t1 = time.time()
         Model.zero_grad()
         
@@ -39,4 +51,38 @@ for epoch in range(10):
         Optimizer.step()
         
         t3 = time.time()
-        print("Batch Load Time :", t3-t1,"Forward Pass Time:", t2 - t1, "Optimization time:", t3-t2, "Loss", l.item() )
+        print("Forward Pass:", "%.3f" % (t2-t1), "Optimization:", "%.3f" % (t3-t2), "Loss", l.item())
+        l0+=l.item()
+        steps+=1
+    
+    l0=l0/steps
+    train_losses.append(l0)
+    
+    t3 = time.time()
+    for local_batch, local_labels in TestingGenerator:
+        local_batch, local_labels = local_batch.to(device), local_labels.to(device)
+        t1 = time.time()
+        Model.zero_grad()
+        
+        Output = Model(local_batch)
+        t2 = time.time()
+        
+        l = Loss(Output, local_labels)
+        
+        t3 = time.time()
+        
+        print("Forward Pass:", "%.3f" % (t2-t1), "Optimization:", "%.3f" % (t3-t2), "Loss", l.item())
+        l0+=l.item()
+        steps+=1
+    
+    l0=l0/steps
+    test_losses.append(l0)
+    
+    if l0>min_loss:
+        torch.save(Model.state_dict(), "model.pt")
+
+plt.plot(train_losses, label='Training Loss', color='blue')
+plt.plot(test_losses, label='Testing Loss', color='red')
+plt.xlabel("epochs")
+plt.ylabel("Average BCE loss")
+plt.savefig("losses.png")
