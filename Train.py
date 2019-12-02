@@ -9,7 +9,7 @@ from DataLoader import *
 import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
 
-TrainLoader = TrafficLight(RootDirectory="./data/test/")
+TrainLoader = TrafficLight(RootDirectory="./data/train/")
 Params = {'batch_size': 64,
           'shuffle': True,
           'num_workers': 8}
@@ -101,7 +101,7 @@ for epoch in range(1, epochs):
     predictions = predictions.astype('float').tolist()
     
     f1.append([f1_score(all_test_labels[:][i], predictions[:][i], average='weighted') for i in range(6)])
-    print(f1)
+    
 
 plt.plot(train_losses, label='Training Loss', color='blue')
 plt.plot(test_losses, label='Testing Loss', color='red')
