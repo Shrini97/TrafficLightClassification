@@ -31,7 +31,7 @@ train_losses = []
 test_losses = []
 epochs = 40
 f1 = []
-states = ["red", "yellow", "green", "green-left", "green-right"]
+states = ["red", "yellow", "green", "green-left", "green-right", "green-solid"]
 
 for epoch in range(1, epochs):
     predictions = []
