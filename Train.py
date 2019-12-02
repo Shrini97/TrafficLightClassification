@@ -28,7 +28,8 @@ Optimizer = torch.optim.Adam([
                                 {'params': Model.conv1.parameters(), 'lr': 1e-4},
                                 {'params': Model.linear.parameters(), 'lr': 1e-4}
                             ], lr=1e-4, betas=[0.9, 0.999])
-
+train_losses = []
+test_losses = []
 
 for epoch in range(1,100):
     # Training
@@ -36,8 +37,7 @@ for epoch in range(1,100):
     steps = 0
     min_loss = 10
     t3 = time.time()
-    train_losses = []
-    test_losses = []
+    
     for local_batch, local_labels in TrainingGenerator:
         local_batch, local_labels = local_batch.to(device), local_labels.to(device)
         t1 = time.time()
@@ -78,8 +78,9 @@ for epoch in range(1,100):
     l0=l0/steps
     test_losses.append(l0)
     
-    if l0>min_loss:
+    if l0<min_loss:
         torch.save(Model.state_dict(), "model.pt")
+        min_loss = l0
 
 plt.plot(train_losses, label='Training Loss', color='blue')
 plt.plot(test_losses, label='Testing Loss', color='red')
