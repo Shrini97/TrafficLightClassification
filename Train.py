@@ -60,6 +60,9 @@ for epoch in range(1,40):
     
     l0=l0/steps
     train_losses.append(l0)
+
+    l0 = 0
+    steps = 0
     
     t3 = time.time()
     for local_batch, local_labels in TestingGenerator:
