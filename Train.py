@@ -30,7 +30,7 @@ Optimizer = torch.optim.Adam([  {'params': Model.FeatureExtractor[0:3].parameter
                                 {'params': Model.FeatureExtractor[7].parameters(), 'lr': 1e-6},
                                 {'params': Model.conv1.parameters(), 'lr': 1e-4},
                                 {'params': Model.linear.parameters(), 'lr': 1e-4}
-                            ], lr=1e-4, betas=[0.9, 0.999])
+                            ], lr=1e-4, betas=[0.9, 0.999], weight_decay = 0.001)
 train_losses = []
 test_losses = []
 
