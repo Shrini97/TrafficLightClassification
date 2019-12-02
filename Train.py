@@ -9,7 +9,7 @@ from DataLoader import *
 import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
 
-TrainLoader = TrafficLight(RootDirectory="./data/train/")
+TrainLoader = TrafficLight(RootDirectory="./data/test/")
 Params = {'batch_size': 64,
           'shuffle': True,
           'num_workers': 8}
