@@ -23,12 +23,7 @@ TestingGenerator = data.DataLoader(TestLoader, **Params)
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 Model = MultiLabelClassifier(FeatureExtractor = 'resnet18').to(device)
 Loss = nn.BCELoss(reduction='mean')
-Optimizer = torch.optim.Adam([  {'params': Model.FeatureExtractor[0:3].parameters(), 'lr': 0},
-                                {'params': Model.FeatureExtractor[4].parameters(), 'lr': 0},
-                                {'params': Model.FeatureExtractor[5].parameters(), 'lr': 1e-10},
-                                {'params': Model.FeatureExtractor[6].parameters(), 'lr': 1e-8},
-                                {'params': Model.FeatureExtractor[7].parameters(), 'lr': 1e-6},
-                                {'params': Model.conv1.parameters(), 'lr': 1e-4},
+Optimizer = torch.optim.Adam([  {'params': Model.conv1.parameters(), 'lr': 1e-4},
                                 {'params': Model.linear.parameters(), 'lr': 1e-4}
                             ], lr=1e-4, betas=[0.9, 0.999], weight_decay = 0.001)
 train_losses = []
