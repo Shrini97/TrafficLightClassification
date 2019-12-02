@@ -26,7 +26,6 @@ class MultiLabelClassifier(torch.nn.Module):
         Returns: a 1d tensor of dimension [10]
         """
         x = self.FeatureExtractor(x)
-        print(x.shape)
         x = F.leaky_relu(self.conv1(x), negative_slope=0.2)
         x = F.sigmoid(self.linear(x.squeeze()))
         return x
