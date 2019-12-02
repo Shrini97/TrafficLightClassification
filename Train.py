@@ -84,9 +84,9 @@ for epoch in range(1, epochs):
         l0+=l.item()
         steps+=1
 
-        for elem in range(Params['batch_size']):
-            predictions.append(Output.detach().tolist())
-            all_test_labels.append(local_labels.detach().tolist())
+        for op, lab in Output.detach().tolist(), local_labels.detach().tolist():
+            predictions.append(op)
+            all_test_labels.append(lab)
 
     
     l0=l0/steps
@@ -96,8 +96,6 @@ for epoch in range(1, epochs):
         torch.save(Model.state_dict(), "model_prunned_lr.pt")
         min_loss = l0
     
-    print(np.array(predictions).shape)
-
     predictions = np.array(predictions, dtype = np.float32) 
     predictions = predictions > 0.5 
     predictions = predictions.astype('float').tolist()
