@@ -16,7 +16,7 @@ class MultiLabelClassifier(torch.nn.Module):
         super(MultiLabelClassifier,self).__init__()
         self.FeatureExtractor =  nn.Sequential(*list(torch.hub.load('pytorch/vision:v0.4.2', FeatureExtractor, pretrained=True,  progress=True).children())[:-2])
         
-        self.conv1 = torch.nn.Conv2d(512, 64, 7, stride=1, padding=0, dilation=1, groups=1, bias=True, padding_mode='zeros')
+        self.conv1 = torch.nn.Conv2d(2048, 64, 7, stride=1, padding=0, dilation=1, groups=1, bias=True, padding_mode='zeros')
         self.linear = torch.nn.Linear(64, 6, bias=True)
         
         
@@ -26,6 +26,7 @@ class MultiLabelClassifier(torch.nn.Module):
         Returns: a 1d tensor of dimension [10]
         """
         x = self.FeatureExtractor(x)
+        print(x.shape)
         x = F.leaky_relu(self.conv1(x), negative_slope=0.2)
         x = F.sigmoid(self.linear(x.squeeze()))
         return x

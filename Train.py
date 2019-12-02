@@ -21,7 +21,7 @@ Params = {'batch_size': 64,
 TestingGenerator = data.DataLoader(TestLoader, **Params)
 
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-Model = MultiLabelClassifier(FeatureExtractor = 'resnet18').to(device)
+Model = MultiLabelClassifier(FeatureExtractor = 'resnet50').to(device)
 Loss = nn.BCELoss(reduction='mean')
 Optimizer = torch.optim.Adam([  {'params': Model.conv1.parameters(), 'lr': 1e-4},
                                 {'params': Model.linear.parameters(), 'lr': 1e-4}
