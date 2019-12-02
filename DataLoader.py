@@ -31,7 +31,7 @@ class TrafficLight():
         i=0
         for ImageName in tqdm(self.ImageList, total=self.NumElems):
             if ImageName.replace(".jpg", ".json") in self.AvailableLabelList:
-                self.Images[i,:,:,:] = cv2.imread(ImageName).transpose(2, 0, 1)
+                self.Images[i,:,:,:] = cv2.cvtColor(cv2.imread(ImageName), cv2.COLOR_BGR2RGB).transpose(2, 0, 1)
                 with open(ImageName.replace(".jpg", ".json")) as f:
                     d = json.load(f)
                     self.Labels[i,:] = np.array(d["class"])

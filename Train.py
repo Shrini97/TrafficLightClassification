@@ -42,7 +42,6 @@ for epoch in range(1,40):
         Model.zero_grad()
         
         Output = Model(local_batch)
-        print(Output)
         t2 = time.time()
         
         l = Loss(Output, local_labels)
