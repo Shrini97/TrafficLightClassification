@@ -96,6 +96,8 @@ for epoch in range(1, epochs):
         torch.save(Model.state_dict(), "model_prunned_lr.pt")
         min_loss = l0
     
+    print(predictions)
+
     predictions = np.array(predictions, dtype = np.float32) 
     predictions = predictions > 0.5 
     predictions = predictions.astype('float').tolist()
