@@ -79,7 +79,7 @@ for epoch in range(1, epochs):
         l = Loss(Output, local_labels)
         t3 = time.time()
         
-        all_test_labels[epoch, steps, :] = local_labels.detech().numpy()
+        
         print("Epoch in testing:", epoch, "steps:", steps, "Forward Pass:", "%.3f" % (t2-t1), "Optimization:", "%.3f" % (t3-t2), "Loss:", l.item())
         l0+=l.item()
         steps+=1
