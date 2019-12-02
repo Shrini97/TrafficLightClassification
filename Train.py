@@ -100,7 +100,7 @@ for epoch in range(1, epochs):
     predictions = predictions > 0.5 
     predictions = predictions.astype('float').tolist()
     
-    f1.append([f1_score(all_test_labels[:][i], predictions[:][i]) for i in range(6)])
+    f1.append([f1_score(all_test_labels[:][i], predictions[:][i], average='weighted') for i in range(6)])
     print(f1)
 
 plt.plot(train_losses, label='Training Loss', color='blue')
