@@ -23,8 +23,11 @@ TestingGenerator = data.DataLoader(TestLoader, **Params)
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 Model = MultiLabelClassifier(FeatureExtractor = 'resnet18').to(device)
 Loss = nn.BCELoss(reduction='mean')
-Optimizer = torch.optim.Adam([
-                                {'params': Model.FeatureExtractor.parameters(), 'lr': 1e-6},
+Optimizer = torch.optim.Adam([  {'params': Model.FeatureExtractor[0:3].parameters(), 'lr': 1e-8},
+                                {'params': Model.FeatureExtractor[4].parameters(), 'lr': 1e-7},
+                                {'params': Model.FeatureExtractor[5].parameters(), 'lr': 1e-6},
+                                {'params': Model.FeatureExtractor[6].parameters(), 'lr': 1e-5},
+                                {'params': Model.FeatureExtractor[7].parameters(), 'lr': 1e-4},
                                 {'params': Model.conv1.parameters(), 'lr': 1e-4},
                                 {'params': Model.linear.parameters(), 'lr': 1e-4}
                             ], lr=1e-4, betas=[0.9, 0.999])
@@ -79,11 +82,11 @@ for epoch in range(1,100):
     test_losses.append(l0)
     
     if l0<min_loss:
-        torch.save(Model.state_dict(), "model.pt")
+        torch.save(Model.state_dict(), "model_prunned_lr.pt")
         min_loss = l0
 
 plt.plot(train_losses, label='Training Loss', color='blue')
 plt.plot(test_losses, label='Testing Loss', color='red')
 plt.xlabel("epochs")
 plt.ylabel("Average BCE loss")
-plt.savefig("losses.png")
+plt.savefig("losses_prunned_lr.png")
