@@ -9,15 +9,15 @@ from DataLoader import *
 import matplotlib.pyplot as plt
 
 TrainLoader = TrafficLight(RootDirectory="./data/train/")
-Params = {'batch_size': 32,
+Params = {'batch_size': 64,
           'shuffle': True,
-          'num_workers': 4}
+          'num_workers': 8}
 TrainingGenerator = data.DataLoader(TrainLoader, **Params)
 
 TestLoader = TrafficLight(RootDirectory="./data/test/")
-Params = {'batch_size': 32,
+Params = {'batch_size': 64,
           'shuffle': True,
-          'num_workers': 4}
+          'num_workers': 8}
 TestingGenerator = data.DataLoader(TestLoader, **Params)
 
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
@@ -34,7 +34,7 @@ Optimizer = torch.optim.Adam([  {'params': Model.FeatureExtractor[0:3].parameter
 train_losses = []
 test_losses = []
 
-for epoch in range(1,100):
+for epoch in range(1,40):
     # Training
     l0 = 0
     steps = 0
