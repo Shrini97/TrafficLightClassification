@@ -84,7 +84,7 @@ for epoch in range(1, epochs):
         l0+=l.item()
         steps+=1
 
-        for op, lab in Output.detach().tolist(), local_labels.detach().tolist():
+        for op, lab in zip(Output.detach().tolist(), local_labels.detach().tolist()):
             predictions.append(op)
             all_test_labels.append(lab)
 
