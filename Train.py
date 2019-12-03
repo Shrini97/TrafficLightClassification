@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
 
 TrainLoader = TrafficLight(RootDirectory="./data/train/")
-Params = {'batch_size': 64,
+Params = {'batch_size': 16,
           'shuffle': True,
           'num_workers': 8}
 TrainingGenerator = data.DataLoader(TrainLoader, **Params)
 
 TestLoader = TrafficLight(RootDirectory="./data/test/")
-Params = {'batch_size': 64,
+Params = {'batch_size': 16,
           'shuffle': True,
           'num_workers': 8}
 TestingGenerator = data.DataLoader(TestLoader, **Params)
