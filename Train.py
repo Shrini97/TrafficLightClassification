@@ -26,7 +26,7 @@ Model = MultiLabelClassifier(FeatureExtractor = 'resnet50').to(device)
 Loss = nn.BCELoss(reduction='mean')
 Optimizer = torch.optim.Adam([  {'params': Model.conv1.parameters(), 'lr': 1e-4},
                                 {'params': Model.linear.parameters(), 'lr': 1e-4}
-                            ], lr=1e-4, betas=[0.9, 0.999], weight_decay = 0.01)
+                            ], lr=1e-4, betas=[0.9, 0.999], weight_decay = 1)
 train_losses = []
 test_losses = []
 epochs = 40
