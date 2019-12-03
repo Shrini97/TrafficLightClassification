@@ -29,7 +29,7 @@ Optimizer = torch.optim.Adam([  {'params': Model.conv1.parameters(), 'lr': 1e-4}
                             ], lr=1e-4, betas=[0.9, 0.999], weight_decay = 0.01)
 train_losses = []
 test_losses = []
-epochs = 20
+epochs = 40
 f1 = []
 states = ["red", "yellow", "green", "green-left", "green-right", "green-solid"]
 
@@ -117,6 +117,6 @@ for i in range(6):
 
 plt.xlabel("epochs")
 plt.ylabel("F1 score")
-plt.legend(loc="upper left")    
+plt.legend(loc='best')    
 plt.savefig("f1_prunned_lr.png")
 plt.close()
